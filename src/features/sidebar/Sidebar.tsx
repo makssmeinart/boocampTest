@@ -4,22 +4,36 @@ import * as AiIcons from "react-icons/ai";
 import { IconContext } from "react-icons";
 import styled from "styled-components/macro";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSidebarData, selectSidebarData } from "./sidebarSlice";
+import {
+  fetchCategoriesData,
+  selectSidebarData,
+} from "features/sidebar/sidebarSlice";
 import { AppDispatch } from "app/store";
-import SidebarItem from "./components/SidebarItem";
+import SidebarItem from "features/sidebar/components/SidebarItem";
 import useLegacyUseEffect from "common/hooks/legacyUseEffect";
+import { selectAppData } from "features/app/appSlice";
+import Loading from "common/components/loading/Loading";
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
   const { categories, currentCategory } = useSelector(selectSidebarData);
+  const { loading } = useSelector(selectAppData);
   const dispatch: AppDispatch = useDispatch();
 
   // useEffect is being mounted twice now in React v18. I need it just once here.
   useLegacyUseEffect(() => {
-    dispatch(fetchSidebarData());
+    dispatch(fetchCategoriesData());
   }, []);
 
   const toggleSidebar = () => setSidebar(!sidebar);
+
+  if (loading === "loading") {
+    return (
+      <LoadingNavMenu>
+        <Loading />
+      </LoadingNavMenu>
+    );
+  }
 
   return (
     <>
@@ -53,6 +67,19 @@ function Navbar() {
 }
 
 export default Navbar;
+
+const LoadingNavMenu = styled("div")`
+  display: flex;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  background-color: #060b26;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+`;
 
 const NavbarContainer = styled("nav")`
   background-color: #060b26;

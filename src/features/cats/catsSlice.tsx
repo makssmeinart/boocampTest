@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "app/store";
 import { Cat, QueryParams } from "common/commonTypes";
 import { fetchCats } from "services/fetchCats";
-import { updateCurrentCategory } from "../sidebar/sidebarSlice";
+import { updateCurrentCategory } from "features/sidebar/sidebarSlice";
 
 interface CatsState {
   cats: Cat[];
@@ -47,7 +47,6 @@ const catsSlice = createSlice({
     builder.addCase(fetchCatsData.fulfilled, (state, action) => {
       state.cats = action.payload;
     });
-    // Update queryParams when we change category
     builder.addCase(updateCurrentCategory, (state, action) => {
       state.queryParams.categoryId = action.payload.id;
     });
@@ -55,7 +54,5 @@ const catsSlice = createSlice({
 });
 
 export const selectCatsData = (state: RootState) => state.cats;
-
-export const { updateQueryParams } = catsSlice.actions;
 
 export default catsSlice.reducer;

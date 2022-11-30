@@ -15,7 +15,7 @@ const initialState: SidebarState = {
   },
 };
 
-export const fetchSidebarData = createAsyncThunk(
+export const fetchCategoriesData = createAsyncThunk(
   "sidebar/fetchData",
   async () => {
     const response = await fetchCategories();
@@ -32,7 +32,7 @@ const sidebarSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchSidebarData.fulfilled, (state, action) => {
+    builder.addCase(fetchCategoriesData.fulfilled, (state, action) => {
       state.categories = action.payload;
     });
   },
