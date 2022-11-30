@@ -5,16 +5,14 @@ import styled from "styled-components/macro";
 const Home = () => {
   return (
     <Container>
-        <Sidebar />
-        <Content />
+      <Sidebar />
+      <Content />
     </Container>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 
 const Container = styled("section")`
   height: 100%;
-  display: flex;
-  gap: 5rem;
-`
+`;
