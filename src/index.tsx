@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { store } from 'app/store';
-import { Provider } from 'react-redux';
-import App from 'app/App';
-import "normalize.css"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { store } from "app/store";
+import { Provider } from "react-redux";
+import App from "app/App";
+import "normalize.css";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 
 root.render(
@@ -16,4 +16,3 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
-

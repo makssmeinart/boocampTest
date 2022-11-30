@@ -1,15 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "app/store";
 import { fetchCategories } from "services/fetchCategories";
 import { Category } from "common/commonTypes";
 
 interface SidebarState {
   categories: Category[];
-  currentCategoryId: number;
+  currentCategory: Category;
 }
 const initialState: SidebarState = {
   categories: [],
-  currentCategoryId: 0,
+  currentCategory: {
+    name: "",
+    id: 0,
+  },
 };
 
 export const fetchSidebarData = createAsyncThunk(
@@ -23,7 +26,11 @@ export const fetchSidebarData = createAsyncThunk(
 const sidebarSlice = createSlice({
   name: "sidebar",
   initialState,
-  reducers: {},
+  reducers: {
+    updateCurrentCategory: (state, action: PayloadAction<Category>) => {
+      state.currentCategory = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchSidebarData.fulfilled, (state, action) => {
       state.categories = action.payload;
@@ -32,5 +39,7 @@ const sidebarSlice = createSlice({
 });
 
 export const selectSidebarData = (state: RootState) => state.sidebar;
+
+export const { updateCurrentCategory } = sidebarSlice.actions;
 
 export default sidebarSlice.reducer;

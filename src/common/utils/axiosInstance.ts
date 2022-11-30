@@ -3,8 +3,8 @@ import axios from "axios";
 const axiosQuery = axios.create({
   headers: {
     "x-api-key": process.env.REACT_APP_API_KEY,
+    "Access-Control-Allow-Credentials": true,
   },
-  withCredentials: false,
   baseURL: process.env.REACT_APP_API_URL,
 });
 

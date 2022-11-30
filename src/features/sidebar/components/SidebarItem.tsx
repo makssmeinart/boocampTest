@@ -1,5 +1,8 @@
 import { Category } from "common/commonTypes";
 import styled from "styled-components/macro";
+import { AppDispatch } from "app/store";
+import { useDispatch } from "react-redux";
+import { updateCurrentCategory } from "features/sidebar/sidebarSlice";
 
 type Props = {
   item: Category;
@@ -8,14 +11,19 @@ type Props = {
 
 const SidebarItem = ({ item, active }: Props) => {
   const { id, name } = item;
+  const dispatch: AppDispatch = useDispatch();
 
-  // TODO - hook this up when you will create cats slice.
-  const updateCategory = () => {
-    console.log(`Current categoryId: ${id}`);
+  const handleUpdateCategory = () => {
+    const payload: Category = {
+      id,
+      name,
+    };
+
+    dispatch(updateCurrentCategory(payload));
   };
 
   return (
-    <NavItem active={active} onClick={updateCategory}>
+    <NavItem active={active} onClick={handleUpdateCategory}>
       <NavText>{name}</NavText>
     </NavItem>
   );

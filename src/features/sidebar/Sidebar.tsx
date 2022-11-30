@@ -11,10 +11,10 @@ import useLegacyUseEffect from "common/hooks/legacyUseEffect";
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
-  const { categories, currentCategoryId } = useSelector(selectSidebarData);
+  const { categories, currentCategory } = useSelector(selectSidebarData);
   const dispatch: AppDispatch = useDispatch();
 
-  // useEffect is being mounted twice now. I need it just once here.
+  // useEffect is being mounted twice now in React v18. I need it just once here.
   useLegacyUseEffect(() => {
     dispatch(fetchSidebarData());
   }, []);
@@ -39,7 +39,7 @@ function Navbar() {
             {categories.map((item) => {
               return (
                 <SidebarItem
-                  active={item.id === currentCategoryId}
+                  active={item.id === currentCategory.id}
                   key={item.name}
                   item={item}
                 />
