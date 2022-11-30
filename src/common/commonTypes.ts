@@ -15,3 +15,5 @@ export type QueryParams = {
   page: number | null;
   categoryId: number | null;
 };
+
+export type LoadingStatus = "idle" | "loading";
