@@ -1,18 +1,23 @@
 import styled from "styled-components/macro";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCatsData, selectCatsData } from "features/cats/catsSlice";
+import {
+  fetchCatsData,
+  selectCatsData,
+  updateQueryParams,
+} from "features/cats/catsSlice";
 import Cat from "features/cats/components/Cat";
 import { AppDispatch } from "app/store";
 import { useEffect, useState } from "react";
 import { selectSidebarData } from "features/sidebar/sidebarSlice";
 import { selectAppData } from "features/app/appSlice";
-import Loading from "common/components/loading/Loading";
 import { ErrorSnackbar } from "common/components/errorSnackbar/ErrorSnackbar";
+import { QueryParams } from "common/commonTypes";
+import Loading from "common/components/loading/Loading";
 
 const Cats = () => {
-  const { cats, queryParams } = useSelector(selectCatsData);
+  const { cats, queryParams, loading } = useSelector(selectCatsData);
   const { currentCategory } = useSelector(selectSidebarData);
-  const { loading, error } = useSelector(selectAppData);
+  const { error } = useSelector(selectAppData);
   const [isInitialized, setIsInitialized] = useState(false);
   const dispatch: AppDispatch = useDispatch();
 
@@ -23,28 +28,42 @@ const Cats = () => {
     setIsInitialized(true);
   }, [queryParams, isInitialized]);
 
+  const handleLoadImages = () => {
+    const payload: QueryParams = {
+      ...queryParams,
+      page: queryParams.page && queryParams.page + 1,
+    };
+    dispatch(updateQueryParams(payload));
+  };
+
   const category =
     currentCategory.name.length > 1 ? currentCategory.name : "all";
 
-  if (loading === "loading") {
+  if (cats.length < 1) {
     return <Loading />;
   }
 
   return (
     <Wrapper>
-      {cats.length > 0 ? (
+      {cats.length === 0 ? (
+        <h1>No cat images were found...</h1>
+      ) : (
         <>
           <h1>Category: {category}</h1>
           <ContentWrapper>
-            {cats.map((cat) => {
-              return <Cat key={cat.id} cat={cat} />;
+            {cats.map((cat, index) => {
+              return <Cat key={`${cat}:${index}`} cat={cat} />;
             })}
           </ContentWrapper>
-          <LoadButton>Load More...</LoadButton>
+          {loading === "loading" ? (
+            <LoadButton disabled onClick={handleLoadImages}>
+              Loading...
+            </LoadButton>
+          ) : (
+            <LoadButton onClick={handleLoadImages}>Load More...</LoadButton>
+          )}
           {error && <ErrorSnackbar />}
         </>
-      ) : (
-        <h1>No cat images were found...</h1>
       )}
     </Wrapper>
   );
@@ -73,4 +92,18 @@ const ContentWrapper = styled("ul")`
   overflow: hidden;
 `;
 
-const LoadButton = styled("button")``;
+const LoadButton = styled("button")`
+  background-color: transparent;
+  padding: 0.6em 1.4em;
+  cursor: pointer;
+  transition: 0.2s ease all;
+  border: 3px solid #111;
+  font-weight: 600;
+  color: #111;
+
+  :hover {
+    scale: 1.04;
+    color: white;
+    background-color: #111;
+  }
+`;
