@@ -1,25 +1,25 @@
 import styled from "styled-components/macro";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   fetchCatsData,
   selectCatsData,
   updateQueryParams,
 } from "features/cats/catsSlice";
 import Cat from "features/cats/components/Cat";
-import { AppDispatch } from "app/store";
 import { useEffect, useState } from "react";
 import { selectSidebarData } from "features/sidebar/sidebarSlice";
 import { selectAppData } from "features/app/appSlice";
 import { ErrorSnackbar } from "common/components/errorSnackbar/ErrorSnackbar";
 import { QueryParams } from "common/commonTypes";
 import Loading from "common/components/loading/Loading";
+import { useCustomDispatch } from "app/store";
 
 const Cats = () => {
   const { cats, queryParams, loading } = useSelector(selectCatsData);
   const { currentCategory } = useSelector(selectSidebarData);
   const { error } = useSelector(selectAppData);
   const [isInitialized, setIsInitialized] = useState(false);
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useCustomDispatch();
 
   useEffect(() => {
     if (isInitialized) {
@@ -46,10 +46,12 @@ const Cats = () => {
   return (
     <Wrapper>
       {cats.length === 0 ? (
-        <h1>No cat images were found...</h1>
+        <Title>No cat images were found...</Title>
       ) : (
         <>
-          <h1>Category: {category}</h1>
+          <Title>
+            Category: <span>{category}</span>
+          </Title>
           <ContentWrapper>
             {cats.map((cat, index) => {
               return <Cat key={`${cat}:${index}`} cat={cat} />;
@@ -97,13 +99,23 @@ const LoadButton = styled("button")`
   padding: 0.6em 1.4em;
   cursor: pointer;
   transition: 0.2s ease all;
-  border: 3px solid #111;
+  border: 3px solid ${({ theme }) => theme.colors.header};
   font-weight: 600;
-  color: #111;
+  color: ${({ theme }) => theme.colors.header};
 
   :hover {
     scale: 1.04;
-    color: white;
-    background-color: #111;
+    color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors.header};
+  }
+`;
+
+const Title = styled("h1")`
+  color: ${({ theme }) => theme.colors.header};
+  transition: 0.7s linear color;
+
+  span {
+    text-transform: capitalize;
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;

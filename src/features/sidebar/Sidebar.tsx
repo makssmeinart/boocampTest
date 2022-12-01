@@ -3,24 +3,33 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { IconContext } from "react-icons";
 import styled from "styled-components/macro";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   fetchCategoriesData,
   selectSidebarData,
 } from "features/sidebar/sidebarSlice";
-import { AppDispatch } from "app/store";
+import { useCustomDispatch } from "app/store";
 import SidebarItem from "features/sidebar/components/SidebarItem";
 import useLegacyUseEffect from "common/hooks/legacyUseEffect";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { selectAppData, updateTheme } from "../app/appSlice";
+import { ThemeType } from "common/commonTypes";
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
   const { categories, currentCategory } = useSelector(selectSidebarData);
-  const dispatch: AppDispatch = useDispatch();
+  const { theme } = useSelector(selectAppData);
+  const dispatch = useCustomDispatch();
 
   // useEffect is being mounted twice now in React v18. I need it just once here.
   useLegacyUseEffect(() => {
     dispatch(fetchCategoriesData());
   }, []);
+
+  const toggleTheme = () => {
+    let newTheme: ThemeType = theme === "light" ? "dark" : "light";
+    dispatch(updateTheme(newTheme));
+  };
 
   const toggleSidebar = () => setSidebar(!sidebar);
 
@@ -31,6 +40,9 @@ function Navbar() {
           <MenuBars>
             <FaIcons.FaBars onClick={toggleSidebar} />
           </MenuBars>
+          <ThemeButton onClick={toggleTheme}>
+            {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+          </ThemeButton>
         </NavbarContainer>
         <NavMenu sidebar={sidebar}>
           <NavMenuItems>
@@ -59,14 +71,15 @@ function Navbar() {
 export default Navbar;
 
 const NavbarContainer = styled("nav")`
-  background-color: #060b26;
+  background-color: ${({ theme }) => theme.colors.header};
   height: 55px;
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   position: fixed;
   top: 0;
   width: 100%;
+  transition: 1s ease background-color;
 `;
 
 const MenuBars = styled("div")`
@@ -78,7 +91,7 @@ const MenuBars = styled("div")`
 `;
 
 const NavMenu = styled("div")<{ sidebar: boolean }>`
-  background-color: #060b26;
+  background-color: ${({ theme }) => theme.colors.header};
   width: 250px;
   height: 100vh;
   display: flex;
@@ -86,7 +99,7 @@ const NavMenu = styled("div")<{ sidebar: boolean }>`
   position: fixed;
   top: 0;
   left: ${({ sidebar }) => (sidebar ? 0 : -100)}%;
-  transition: ${({ sidebar }) => (sidebar ? 350 : 850)}ms;
+  transition: ${({ sidebar }) => (sidebar ? 1000 : 850)}ms;
 `;
 
 const NavMenuItems = styled("ul")`
@@ -96,7 +109,7 @@ const NavMenuItems = styled("ul")`
 `;
 
 const NavbarToggle = styled("li")`
-  background-color: #060b26;
+  background-color: inherit;
   width: 100%;
   height: 80px;
   display: flex;
@@ -105,5 +118,22 @@ const NavbarToggle = styled("li")`
 
   svg {
     cursor: pointer;
+  }
+`;
+
+const ThemeButton = styled("button")`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border: none;
+
+  svg {
+    width: 100%;
+    height: 100%;
   }
 `;

@@ -2,13 +2,16 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "app/store";
 import { fetchCatsData } from "features/cats/catsSlice";
 import { fetchCategoriesData } from "features/sidebar/sidebarSlice";
+import { ThemeType } from "../../common/commonTypes";
 
 interface AppState {
   error: string;
+  theme: ThemeType;
 }
 const initialState: AppState = {
   // Removed global loading because it dosen't work well with infinite scroll
   error: "",
+  theme: "light",
 };
 
 const appSlice = createSlice({
@@ -17,6 +20,9 @@ const appSlice = createSlice({
   reducers: {
     updateErrorStatus: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
+    },
+    updateTheme: (state, action: PayloadAction<ThemeType>) => {
+      state.theme = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -32,6 +38,6 @@ const appSlice = createSlice({
 
 export const selectAppData = (state: RootState) => state.app;
 
-export const { updateErrorStatus } = appSlice.actions;
+export const { updateErrorStatus, updateTheme } = appSlice.actions;
 
 export default appSlice.reducer;
