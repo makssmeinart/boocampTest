@@ -12,7 +12,7 @@ import styled from "styled-components/macro";
 
 function App() {
   return (
-    <Container className="App">
+    <Container>
       <Router>
         <Routes>
           <Route path={ROUTES.HOME} element={<Home />} />

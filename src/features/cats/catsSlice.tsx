@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "app/store";
-import { Cat, QueryParams } from "common/commonTypes";
+import { Cat, LoadingStatus, QueryParams } from "common/commonTypes";
 import { fetchCats } from "services/fetchCats";
 import { updateCurrentCategory } from "features/sidebar/sidebarSlice";
 
 interface CatsState {
   cats: Cat[];
   queryParams: QueryParams;
+  loading: LoadingStatus;
 }
 
 const initialState: CatsState = {
@@ -16,6 +17,7 @@ const initialState: CatsState = {
     page: 1,
     categoryId: null,
   },
+  loading: "idle",
 };
 
 export const fetchCatsData = createAsyncThunk(
@@ -44,15 +46,32 @@ const catsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // I really don't like this way of loading. But I can't seem to find anything better for my problem.
     builder.addCase(fetchCatsData.fulfilled, (state, action) => {
-      state.cats = action.payload;
+      state.cats.push(...action.payload);
+      state.loading = "idle";
+    });
+    builder.addCase(fetchCatsData.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(fetchCatsData.rejected, (state) => {
+      state.loading = "idle";
     });
     builder.addCase(updateCurrentCategory, (state, action) => {
-      state.queryParams.categoryId = action.payload.id;
+      const newQueryParams: QueryParams = {
+        limit: 10,
+        page: 1,
+        categoryId: action.payload.id,
+      };
+
+      state.queryParams = newQueryParams;
+      state.cats = [];
     });
   },
 });
 
 export const selectCatsData = (state: RootState) => state.cats;
+
+export const { updateQueryParams } = catsSlice.actions;
 
 export default catsSlice.reducer;

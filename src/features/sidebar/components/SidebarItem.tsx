@@ -7,9 +7,10 @@ import { updateCurrentCategory } from "features/sidebar/sidebarSlice";
 type Props = {
   item: Category;
   active: boolean;
+  toggleSidebar: () => void;
 };
 
-const SidebarItem = ({ item, active }: Props) => {
+const SidebarItem = ({ item, active, toggleSidebar }: Props) => {
   const { id, name } = item;
   const dispatch: AppDispatch = useDispatch();
 
@@ -20,6 +21,7 @@ const SidebarItem = ({ item, active }: Props) => {
     };
 
     dispatch(updateCurrentCategory(payload));
+    toggleSidebar();
   };
 
   return (
