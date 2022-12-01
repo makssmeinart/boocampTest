@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: -1;
+  z-index: 1;
 `;
 
 const SpinnerInner = styled.div`

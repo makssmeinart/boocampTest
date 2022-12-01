@@ -1,7 +1,6 @@
 import { Category } from "common/commonTypes";
 import styled from "styled-components/macro";
-import { AppDispatch } from "app/store";
-import { useDispatch } from "react-redux";
+import { useCustomDispatch } from "app/store";
 import { updateCurrentCategory } from "features/sidebar/sidebarSlice";
 
 type Props = {
@@ -12,7 +11,7 @@ type Props = {
 
 const SidebarItem = ({ item, active, toggleSidebar }: Props) => {
   const { id, name } = item;
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useCustomDispatch();
 
   const handleUpdateCategory = () => {
     const payload: Category = {
@@ -36,10 +35,11 @@ export default SidebarItem;
 const NavItem = styled("li")<{ active: boolean }>`
   padding: 8px 0 8px 16px;
   cursor: pointer;
-  background-color: ${({ active }) => (active ? "#282c34" : "")};
+  background-color: ${(props) =>
+    props.active ? props.theme.colors.accent : ""};
 
   :hover {
-    background-color: #282c34;
+    background-color: ${({ theme }) => theme.colors.accent};
   }
 `;
 
@@ -49,7 +49,7 @@ const NavText = styled("p")`
   align-items: center;
   list-style: none;
   font-size: 1rem;
-  color: white;
+  color: ${({ theme }) => theme.colors.background};
   font-weight: 700;
   text-transform: uppercase;
 `;

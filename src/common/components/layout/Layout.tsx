@@ -13,7 +13,9 @@ export default Layout;
 
 const ContentWrapper = styled("div")`
   padding: 5rem 15rem;
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
+  background-color: ${({ theme }) => theme.colors.background};
+  transition: 0.5s ease background-color;
 
   h1 {
     margin: 2rem 0 0;

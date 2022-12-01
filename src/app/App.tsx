@@ -8,21 +8,30 @@ import {
 import { ROUTES } from "common/constant/routes";
 import Home from "features/home/Home";
 import PageNotFound from "common/components/pageNotFound/PageNotFound";
-import styled from "styled-components/macro";
+import styled, { ThemeProvider } from "styled-components/macro";
+import lightTheme from "common/styles/light";
+import darkTheme from "common/styles/dark";
+import { useSelector } from "react-redux";
+import { selectAppData } from "features/app/appSlice";
 
 function App() {
+  const { theme } = useSelector(selectAppData);
+  const currentTheme = theme === "dark" ? darkTheme : lightTheme;
+
   return (
     <Container>
-      <Router>
-        <Routes>
-          <Route path={ROUTES.HOME} element={<Home />} />
-          <Route path={ROUTES.PAGE_NOT_FOUND} element={<PageNotFound />} />
-          <Route
-            path={"/*"}
-            element={<Navigate to={ROUTES.PAGE_NOT_FOUND} />}
-          />
-        </Routes>
-      </Router>
+      <ThemeProvider theme={currentTheme}>
+        <Router>
+          <Routes>
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.PAGE_NOT_FOUND} element={<PageNotFound />} />
+            <Route
+              path={"/*"}
+              element={<Navigate to={ROUTES.PAGE_NOT_FOUND} />}
+            />
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </Container>
   );
 }
