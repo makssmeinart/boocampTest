@@ -14,8 +14,10 @@ import darkTheme from "common/styles/dark";
 import { useSelector } from "react-redux";
 import { selectAppData } from "features/app/appSlice";
 import ScrollToTop from "common/components/scrollToTop/ScrollToTop";
+import { ErrorSnackbar } from "common/components/errorSnackbar/ErrorSnackbar";
 
 function App() {
+  const { error } = useSelector(selectAppData);
   const { theme } = useSelector(selectAppData);
   const currentTheme = theme === "dark" ? darkTheme : lightTheme;
 
@@ -33,6 +35,7 @@ function App() {
             />
           </Routes>
         </Router>
+        {error && <ErrorSnackbar />}
       </ThemeProvider>
     </Container>
   );

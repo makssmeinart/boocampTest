@@ -11,8 +11,6 @@ import {
   selectSidebarData,
   updateCurrentCategory,
 } from "features/sidebar/sidebarSlice";
-import { selectAppData } from "features/app/appSlice";
-import { ErrorSnackbar } from "common/components/errorSnackbar/ErrorSnackbar";
 import { Category, QueryParams } from "common/commonTypes";
 import Loading from "common/components/loading/Loading";
 import { useCustomDispatch } from "app/store";
@@ -20,7 +18,6 @@ import { useCustomDispatch } from "app/store";
 const Cats = () => {
   const { cats, queryParams, loading } = useSelector(selectCatsData);
   const { currentCategory } = useSelector(selectSidebarData);
-  const { error } = useSelector(selectAppData);
   const [isInitialized, setIsInitialized] = useState(false);
   const dispatch = useCustomDispatch();
 
@@ -128,7 +125,6 @@ const Cats = () => {
             })}
           </ContentWrapper>
           {loadButton}
-          {error && <ErrorSnackbar />}
         </>
       )}
     </Wrapper>
