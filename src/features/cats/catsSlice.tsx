@@ -54,7 +54,7 @@ const catsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // I really don't like this way of loading. But I can't seem to find anything better for my problem.
+    // Maybe change the loading.
     builder.addCase(fetchCatsData.fulfilled, (state, action) => {
       state.cats.push(...action.payload);
       state.loading = "idle";

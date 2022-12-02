@@ -2,14 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "app/store";
 import { fetchCatsData } from "features/cats/catsSlice";
 import { fetchCategoriesData } from "features/sidebar/sidebarSlice";
-import { ThemeType } from "../../common/commonTypes";
+import { ThemeType } from "common/commonTypes";
 
 interface AppState {
   error: string;
   theme: ThemeType;
 }
 const initialState: AppState = {
-  // Removed global loading because it dosen't work well with infinite scroll
   error: "",
   theme: "light",
 };
