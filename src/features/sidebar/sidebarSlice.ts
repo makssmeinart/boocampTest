@@ -10,7 +10,7 @@ interface SidebarState {
 const initialState: SidebarState = {
   categories: [],
   currentCategory: {
-    name: "",
+    name: "all",
     id: 0,
   },
 };
