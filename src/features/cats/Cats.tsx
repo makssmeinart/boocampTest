@@ -67,6 +67,14 @@ const Cats = () => {
 
   const isButtonDisabled = loading === "loading";
 
+  const loadButton = isButtonDisabled ? (
+    <LoadButton disabled onClick={handleLoadImages}>
+      Loading...
+    </LoadButton>
+  ) : (
+    <LoadButton onClick={handleLoadImages}>Load More...</LoadButton>
+  );
+
   if (cats.length < 1) {
     return <Loading />;
   }
@@ -105,13 +113,7 @@ const Cats = () => {
               return <Cat key={`${cat}:${index}`} cat={cat} />;
             })}
           </ContentWrapper>
-          {loading === "loading" ? (
-            <LoadButton disabled onClick={handleLoadImages}>
-              Loading...
-            </LoadButton>
-          ) : (
-            <LoadButton onClick={handleLoadImages}>Load More...</LoadButton>
-          )}
+          {loadButton}
           {error && <ErrorSnackbar />}
         </>
       )}
