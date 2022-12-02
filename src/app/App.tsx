@@ -13,6 +13,7 @@ import lightTheme from "common/styles/light";
 import darkTheme from "common/styles/dark";
 import { useSelector } from "react-redux";
 import { selectAppData } from "features/app/appSlice";
+import ScrollToTop from "common/components/scrollToTop/ScrollToTop";
 
 function App() {
   const { theme } = useSelector(selectAppData);
@@ -21,6 +22,7 @@ function App() {
   return (
     <Container>
       <ThemeProvider theme={currentTheme}>
+        <ScrollToTop />
         <Router>
           <Routes>
             <Route path={ROUTES.HOME} element={<Home />} />
