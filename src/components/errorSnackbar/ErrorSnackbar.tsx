@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Snackbar } from "common/components/snackbar/Snackbar";
-import { selectAppData, updateErrorStatus } from "features/app/appSlice";
+import { Snackbar } from "components/snackbar/Snackbar";
+import { selectAppData } from "store/selectors";
+import { updateErrorStatus } from "store/slices/appSlice";
 
 export const ErrorSnackbar = () => {
   const { error } = useSelector(selectAppData);

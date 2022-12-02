@@ -5,16 +5,16 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { ROUTES } from "common/constant/routes";
-import Home from "features/home/Home";
-import PageNotFound from "common/components/pageNotFound/PageNotFound";
+import { ROUTES } from "constant/routes";
+import Home from "pages/home/Home";
+import PageNotFound from "components/pageNotFound/PageNotFound";
 import styled, { ThemeProvider } from "styled-components/macro";
 import lightTheme from "common/styles/light";
 import darkTheme from "common/styles/dark";
 import { useSelector } from "react-redux";
-import { selectAppData } from "features/app/appSlice";
-import ScrollToTop from "common/components/scrollToTop/ScrollToTop";
-import { ErrorSnackbar } from "common/components/errorSnackbar/ErrorSnackbar";
+import { selectAppData } from "store/selectors";
+import { ErrorSnackbar } from "components/errorSnackbar/ErrorSnackbar";
+import ScrollToTop from "components/scrollToTop/ScrollToTop";
 
 function App() {
   const { error } = useSelector(selectAppData);

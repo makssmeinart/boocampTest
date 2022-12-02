@@ -1,7 +1,7 @@
-import Sidebar from "features/sidebar/Sidebar";
+import Sidebar from "components/sidebar/Sidebar";
 import styled from "styled-components/macro";
-import Layout from "common/components/layout/Layout";
-import Cats from "features/cats/Cats";
+import Layout from "components/layout/Layout";
+import Cats from "pages/cats/Cats";
 
 const Home = () => {
   return (

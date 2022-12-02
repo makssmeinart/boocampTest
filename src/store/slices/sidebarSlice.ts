@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "app/store";
 import { fetchCategories } from "services/fetchCategories";
 import { Category } from "common/commonTypes";
 
@@ -37,8 +36,6 @@ const sidebarSlice = createSlice({
     });
   },
 });
-
-export const selectSidebarData = (state: RootState) => state.sidebar;
 
 export const { updateCurrentCategory } = sidebarSlice.actions;
 

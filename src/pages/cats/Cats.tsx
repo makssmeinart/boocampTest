@@ -1,19 +1,13 @@
 import styled from "styled-components/macro";
 import { useSelector } from "react-redux";
-import {
-  fetchCatsData,
-  selectCatsData,
-  updateQueryParams,
-} from "features/cats/catsSlice";
-import Cat from "features/cats/components/Cat";
+import { fetchCatsData, updateQueryParams } from "store/slices/catsSlice";
 import { useEffect, useState } from "react";
-import {
-  selectSidebarData,
-  updateCurrentCategory,
-} from "features/sidebar/sidebarSlice";
+import { updateCurrentCategory } from "store/slices/sidebarSlice";
 import { Category, QueryParams } from "common/commonTypes";
-import Loading from "common/components/loading/Loading";
-import { useCustomDispatch } from "app/store";
+import { useCustomDispatch } from "store/store";
+import { selectCatsData, selectSidebarData } from "store/selectors";
+import Loading from "components/loading/Loading";
+import Cat from "components/cat/Cat";
 
 const Cats = () => {
   const { cats, queryParams, loading } = useSelector(selectCatsData);

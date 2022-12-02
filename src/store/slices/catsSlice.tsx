@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "app/store";
+import { RootState } from "store/store";
 import { Cat, LoadingStatus, QueryParams } from "common/commonTypes";
 import { fetchCats } from "services/fetchCats";
-import { updateCurrentCategory } from "features/sidebar/sidebarSlice";
+import { updateCurrentCategory } from "store/slices/sidebarSlice";
 
 interface CatsState {
   cats: Cat[];
@@ -77,8 +77,6 @@ const catsSlice = createSlice({
     });
   },
 });
-
-export const selectCatsData = (state: RootState) => state.cats;
 
 export const { updateQueryParams } = catsSlice.actions;
 

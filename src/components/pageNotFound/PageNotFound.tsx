@@ -1,4 +1,4 @@
-import { ROUTES } from "common/constant/routes";
+import { ROUTES } from "constant/routes";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 

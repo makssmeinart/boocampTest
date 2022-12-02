@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { sidebarReducer, catsReducer, appReducer } from "features";
+import { sidebarReducer, catsReducer, appReducer } from "store/";
 import { useDispatch } from "react-redux";
 
 export const store = configureStore({
@@ -8,7 +8,6 @@ export const store = configureStore({
     cats: catsReducer,
     app: appReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,7 +1,7 @@
 import { Category } from "common/commonTypes";
 import styled from "styled-components/macro";
-import { useCustomDispatch } from "app/store";
-import { updateCurrentCategory } from "features/sidebar/sidebarSlice";
+import { useCustomDispatch } from "store/store";
+import { updateCurrentCategory } from "store/slices/sidebarSlice";
 
 type Props = {
   item: Category;

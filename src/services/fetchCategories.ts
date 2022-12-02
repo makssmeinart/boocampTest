@@ -1,4 +1,4 @@
-import axiosQuery from "common/utils/axiosInstance";
+import axiosQuery from "utils/axiosInstance";
 import { AxiosResponse } from "axios";
 import { Category } from "common/commonTypes";
 

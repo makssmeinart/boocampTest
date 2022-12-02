@@ -4,16 +4,14 @@ import * as AiIcons from "react-icons/ai";
 import { IconContext } from "react-icons";
 import styled from "styled-components/macro";
 import { useSelector } from "react-redux";
-import {
-  fetchCategoriesData,
-  selectSidebarData,
-} from "features/sidebar/sidebarSlice";
-import { useCustomDispatch } from "app/store";
-import SidebarItem from "features/sidebar/components/SidebarItem";
-import useLegacyUseEffect from "common/hooks/legacyUseEffect";
+import { fetchCategoriesData } from "store/slices/sidebarSlice";
+import { useCustomDispatch } from "store/store";
+import SidebarItem from "components/sidebar/components/SidebarItem";
+import useLegacyUseEffect from "hooks/legacyUseEffect";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
-import { selectAppData, updateTheme } from "../app/appSlice";
 import { ThemeType } from "common/commonTypes";
+import { selectAppData, selectSidebarData } from "store/selectors";
+import { updateTheme } from "store/slices/appSlice";
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);

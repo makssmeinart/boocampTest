@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "app/store";
-import { fetchCatsData } from "features/cats/catsSlice";
-import { fetchCategoriesData } from "features/sidebar/sidebarSlice";
+import { fetchCatsData } from "store/slices/catsSlice";
+import { fetchCategoriesData } from "store/slices/sidebarSlice";
 import { ThemeType } from "common/commonTypes";
 
 interface AppState {
@@ -34,8 +33,6 @@ const appSlice = createSlice({
     );
   },
 });
-
-export const selectAppData = (state: RootState) => state.app;
 
 export const { updateErrorStatus, updateTheme } = appSlice.actions;
 
