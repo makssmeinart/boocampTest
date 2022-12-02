@@ -42,7 +42,15 @@ const catsSlice = createSlice({
   initialState,
   reducers: {
     updateQueryParams: (state, action: PayloadAction<QueryParams>) => {
-      state.queryParams = action.payload;
+      const { limit } = action.payload;
+      let newLimit = limit < 1 ? 1 : limit > 50 ? 50 : limit;
+
+      const newPayload: QueryParams = {
+        ...action.payload,
+        limit: newLimit,
+      };
+
+      state.queryParams = newPayload;
     },
   },
   extraReducers: (builder) => {
