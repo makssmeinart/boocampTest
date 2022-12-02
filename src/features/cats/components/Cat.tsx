@@ -1,5 +1,7 @@
 import styled from "styled-components/macro";
 import { Cat as CatType } from "common/commonTypes";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import placeholder from "assets/images/placeholder/placeholder.png";
 
 type Props = {
   cat: CatType;
@@ -10,7 +12,14 @@ const Cat = ({ cat }: Props) => {
 
   return (
     <CatItem>
-      <img src={url} alt="Cats" />
+      <LazyLoadImage
+        effect={"blur"}
+        alt={"Cat image"}
+        src={url} // use normal <img> attributes as props
+        width={"100%"}
+        height={"100%"}
+        placeholderSrc={placeholder}
+      />
     </CatItem>
   );
 };
@@ -20,9 +29,4 @@ export default Cat;
 const CatItem = styled("li")`
   width: 100%;
   height: 100%;
-
-  img {
-    height: 100%;
-    width: 100%;
-  }
 `;

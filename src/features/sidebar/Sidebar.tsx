@@ -98,8 +98,8 @@ const NavMenu = styled("div")<{ sidebar: boolean }>`
   justify-content: center;
   position: fixed;
   top: 0;
-  left: ${({ sidebar }) => (sidebar ? 0 : -100)}%;
-  transition: ${({ sidebar }) => (sidebar ? 1000 : 850)}ms;
+  transform: translateY(${({ sidebar }) => (sidebar ? 0 : -100)}%);
+  transition: ${({ sidebar }) => (sidebar ? 500 : 350)}ms;
 `;
 
 const NavMenuItems = styled("ul")`
