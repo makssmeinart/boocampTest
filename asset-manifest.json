@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/boocampTest/static/css/main.cbdbe6e5.css",
+    "main.js": "/boocampTest/static/js/main.a611c8ef.js",
+    "index.html": "/boocampTest/index.html",
+    "main.cbdbe6e5.css.map": "/boocampTest/static/css/main.cbdbe6e5.css.map",
+    "main.a611c8ef.js.map": "/boocampTest/static/js/main.a611c8ef.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cbdbe6e5.css",
+    "static/js/main.a611c8ef.js"
+  ]
+}
