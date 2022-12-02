@@ -41,6 +41,20 @@ const Cats = () => {
     dispatch(updateQueryParams(payload));
   };
 
+  const handleScroll = () => {
+    const shouldScroll =
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight;
+
+    if (shouldScroll) {
+      handleLoadImages();
+    }
+  };
+  // I think we don't need to removeAddListener now in React v18 since it remounts it itself.
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+  }, []);
+
   const handleResetFilter = () => {
     const payload: Category = {
       id: 0,
