@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "store/store";
 import { Cat, LoadingStatus, QueryParams } from "common/commonTypes";
 import { fetchCats } from "services/fetchCats";
-import { updateCurrentCategory } from "store/slices/sidebarSlice";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 interface CatsState {
   cats: Cat[];
@@ -64,16 +65,6 @@ const catsSlice = createSlice({
     });
     builder.addCase(fetchCatsData.rejected, (state) => {
       state.loading = "idle";
-    });
-    builder.addCase(updateCurrentCategory, (state, action) => {
-      const newQueryParams: QueryParams = {
-        limit: 10,
-        page: 1,
-        categoryId: action.payload.id,
-      };
-
-      state.queryParams = newQueryParams;
-      state.cats = [];
     });
   },
 });

@@ -19,3 +19,7 @@ export type QueryParams = {
 export type LoadingStatus = "idle" | "loading";
 
 export type ThemeType = "light" | "dark";
+
+export type CatsParams = {
+  id: string;
+};

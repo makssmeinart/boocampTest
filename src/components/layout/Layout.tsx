@@ -12,6 +12,10 @@ const Layout = ({ children }: Props) => {
 export default Layout;
 
 const ContentWrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
   padding: 5rem 15rem;
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background};

@@ -2,18 +2,26 @@ import styled from "styled-components/macro";
 import { useSelector } from "react-redux";
 import { fetchCatsData, updateQueryParams } from "store/slices/catsSlice";
 import { useEffect, useState } from "react";
-import { updateCurrentCategory } from "store/slices/sidebarSlice";
-import { Category, QueryParams } from "common/commonTypes";
+import { CatsParams, QueryParams } from "common/commonTypes";
 import { useCustomDispatch } from "store/store";
-import { selectCatsData, selectSidebarData } from "store/selectors";
+import { selectCatsData } from "store/selectors";
 import Loading from "components/loading/Loading";
 import Cat from "components/cat/Cat";
+import Layout from "components/layout/Layout";
+import Sidebar from "components/sidebar/Sidebar";
+import { useParams } from "react-router-dom";
 
 const Cats = () => {
   const { cats, queryParams, loading } = useSelector(selectCatsData);
-  const { currentCategory } = useSelector(selectSidebarData);
+  const { id } = useParams<CatsParams>();
   const [isInitialized, setIsInitialized] = useState(false);
   const dispatch = useCustomDispatch();
+
+  const loadImagesPayload = {
+    ...queryParams,
+    categoryId: Number(id),
+    page: queryParams.page && queryParams.page + 1,
+  };
 
   useEffect(() => {
     if (isInitialized) {
@@ -22,15 +30,19 @@ const Cats = () => {
     setIsInitialized(true);
   }, [queryParams, isInitialized]);
 
-  const handleLoadImages = () => {
-    const newPage = queryParams.page && queryParams.page + 1;
-
-    const payload: QueryParams = {
-      ...queryParams,
-      page: newPage,
-    };
+  const handleLoadImages = (payload: QueryParams) => {
     dispatch(updateQueryParams(payload));
   };
+
+  useEffect(() => {
+    const payload: QueryParams = {
+      categoryId: Number(id),
+      limit: 10,
+      page: 1,
+    };
+
+    handleLoadImages(payload);
+  }, [id]);
 
   const handleScroll = () => {
     const shouldScroll =
@@ -38,21 +50,13 @@ const Cats = () => {
       document.documentElement.scrollHeight;
 
     if (shouldScroll) {
-      handleLoadImages();
+      handleLoadImages(loadImagesPayload);
     }
   };
   // I think we don't need to removeAddListener now in React v18 since it remounts it itself.
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
   }, []);
-
-  const handleResetFilter = () => {
-    const payload: Category = {
-      id: 0,
-      name: "all",
-    };
-    dispatch(updateCurrentCategory(payload));
-  };
 
   const handleUpdateLimit = (increaseLimit: boolean) => {
     const newLimit = increaseLimit
@@ -61,23 +65,23 @@ const Cats = () => {
 
     const payload: QueryParams = {
       ...queryParams,
+      categoryId: Number(id),
       limit: newLimit,
     };
 
     dispatch(updateQueryParams(payload));
   };
 
-  const category =
-    currentCategory.name.length > 1 ? currentCategory.name : "all";
+  const category = "all";
 
   const isButtonDisabled = loading === "loading";
 
   const loadButton = isButtonDisabled ? (
-    <LoadButton disabled onClick={handleLoadImages}>
-      Loading...
-    </LoadButton>
+    <LoadButton disabled>Loading...</LoadButton>
   ) : (
-    <LoadButton onClick={handleLoadImages}>Load More...</LoadButton>
+    <LoadButton onClick={() => handleLoadImages(loadImagesPayload)}>
+      Load More...
+    </LoadButton>
   );
 
   if (cats.length < 1) {
@@ -85,55 +89,53 @@ const Cats = () => {
   }
 
   return (
-    <Wrapper>
+    <Container>
       {cats.length === 0 ? (
         <Title>No cat images were found...</Title>
       ) : (
         <>
-          <Title>
-            Category: <span>{category}</span>
-          </Title>
-          <ButtonOptions>
-            <ButtonOption
-              disabled={isButtonDisabled}
-              onClick={handleResetFilter}
-            >
-              Reset filters
-            </ButtonOption>
-            <ButtonOption
-              disabled={isButtonDisabled}
-              onClick={() => handleUpdateLimit(true)}
-            >
-              Max-Images: +10
-            </ButtonOption>
-            <ButtonOption
-              disabled={isButtonDisabled}
-              onClick={() => handleUpdateLimit(false)}
-            >
-              Max-Images: -10
-            </ButtonOption>
-          </ButtonOptions>
-          <ContentWrapper>
-            {cats.map((cat, index) => {
-              return <Cat key={`${cat}:${index}`} cat={cat} />;
-            })}
-          </ContentWrapper>
-          {loadButton}
+          <Sidebar />
+          <Layout>
+            <Title>
+              Category: <span>{category}</span>
+            </Title>
+            <ButtonOptions>
+              <ButtonOption
+                disabled={isButtonDisabled}
+                // onClick={handleResetFilter}
+              >
+                Reset filters
+              </ButtonOption>
+              <ButtonOption
+                disabled={isButtonDisabled}
+                onClick={() => handleUpdateLimit(true)}
+              >
+                Max-Images: +10
+              </ButtonOption>
+              <ButtonOption
+                disabled={isButtonDisabled}
+                onClick={() => handleUpdateLimit(false)}
+              >
+                Max-Images: -10
+              </ButtonOption>
+            </ButtonOptions>
+            <ContentWrapper>
+              {cats.map((cat, index) => {
+                return <Cat key={`${cat}:${index}`} cat={cat} />;
+              })}
+            </ContentWrapper>
+            {loadButton}
+          </Layout>
         </>
       )}
-    </Wrapper>
+    </Container>
   );
 };
 
 export default Cats;
 
-const Wrapper = styled("div")`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
+const Container = styled("section")`
   height: 100%;
-  gap: 2rem;
 `;
 
 const ContentWrapper = styled("ul")`

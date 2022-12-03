@@ -1,20 +1,19 @@
 import React from "react";
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
   Navigate,
+  Route,
+  Routes,
 } from "react-router-dom";
 import { ROUTES } from "constant/routes";
-import Home from "pages/home/Home";
 import PageNotFound from "components/pageNotFound/PageNotFound";
 import styled, { ThemeProvider } from "styled-components/macro";
-import lightTheme from "common/styles/light";
-import darkTheme from "common/styles/dark";
 import { useSelector } from "react-redux";
 import { selectAppData } from "store/selectors";
 import { ErrorSnackbar } from "components/errorSnackbar/ErrorSnackbar";
 import ScrollToTop from "components/scrollToTop/ScrollToTop";
+import { CatsPage } from "pages";
+import { darkTheme, lightTheme } from "styles";
 
 function App() {
   const { error } = useSelector(selectAppData);
@@ -27,7 +26,11 @@ function App() {
         <ScrollToTop />
         <Router>
           <Routes>
-            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route
+              path={ROUTES.HOME}
+              element={<Navigate to={ROUTES.NO_CATEGORY} />}
+            />
+            <Route path={ROUTES.CATS} element={<CatsPage />} />
             <Route path={ROUTES.PAGE_NOT_FOUND} element={<PageNotFound />} />
             <Route
               path={"/*"}

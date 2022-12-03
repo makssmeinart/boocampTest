@@ -26,6 +26,6 @@
     "index.d.ts"
   ],
   "files": [
-    "src/common/styles/styled.d.ts"
+    "src/styles/styled.d.ts"
   ]
 }

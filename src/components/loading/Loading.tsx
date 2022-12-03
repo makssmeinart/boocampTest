@@ -20,6 +20,7 @@ const Spinner = () => {
 const Wrapper = styled.div`
   position: absolute;
   top: 0;
+  background: ${({ theme }) => theme.colors.background};
   bottom: 0;
   right: 0;
   left: 0;
@@ -37,7 +38,7 @@ const SpinnerInner = styled.div`
   border-right: 2px solid grey;
   border-bottom: 2px solid grey;
   border-left: 4px solid black;
-  background: transparent;
+  background: ${({ theme }) => theme.colors.background};
   width: 50px;
   height: 50px;
   border-radius: 50%;

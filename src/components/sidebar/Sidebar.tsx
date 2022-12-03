@@ -14,8 +14,8 @@ import { selectAppData, selectSidebarData } from "store/selectors";
 import { updateTheme } from "store/slices/appSlice";
 
 function Navbar() {
-  const [sidebar, setSidebar] = useState(false);
-  const { categories, currentCategory } = useSelector(selectSidebarData);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const { categories } = useSelector(selectSidebarData);
   const { theme } = useSelector(selectAppData);
   const dispatch = useCustomDispatch();
 
@@ -29,7 +29,7 @@ function Navbar() {
     dispatch(updateTheme(newTheme));
   };
 
-  const toggleSidebar = () => setSidebar(!sidebar);
+  const toggleSidebar = () => setShowSidebar(!showSidebar);
 
   return (
     <>
@@ -42,20 +42,21 @@ function Navbar() {
             {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
           </ThemeButton>
         </NavbarContainer>
-        <NavMenu sidebar={sidebar}>
+        <NavMenu sidebar={showSidebar}>
           <NavMenuItems>
             <NavbarToggle onClick={toggleSidebar}>
               <MenuBars>
                 <AiIcons.AiOutlineClose />
               </MenuBars>
             </NavbarToggle>
-            {categories.map((item) => {
+            {categories.map((item, index) => {
               return (
                 <SidebarItem
-                  active={item.id === currentCategory.id}
                   key={item.name}
                   item={item}
                   toggleSidebar={toggleSidebar}
+                  isSidebarShown={showSidebar}
+                  itemIndex={index}
                 />
               );
             })}
@@ -101,6 +102,8 @@ const NavMenu = styled("div")<{ sidebar: boolean }>`
 `;
 
 const NavMenuItems = styled("ul")`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   list-style: none;
   padding: 0;
