@@ -97,6 +97,7 @@ const NavMenu = styled("div")<{ sidebar: boolean }>`
   justify-content: center;
   position: fixed;
   top: 0;
+  left: 0;
   transform: translateY(${({ sidebar }) => (sidebar ? 0 : -100)}%);
   transition: ${({ sidebar }) => (sidebar ? 500 : 350)}ms;
 `;

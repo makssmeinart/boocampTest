@@ -37,13 +37,13 @@ const catsSlice = createSlice({
   reducers: {
     updateQueryParams: (state, action: PayloadAction<QueryParams>) => {
       const { limit } = action.payload;
-      let newLimit = limit < 1 ? 1 : limit > 50 ? 50 : limit;
+      // Seems like 60 is the limit. But in docs it is saying should be 100
+      let newLimit = limit < 1 ? 1 : limit > 60 ? 60 : limit;
 
       const newPayload: QueryParams = {
         ...action.payload,
         limit: newLimit,
       };
-
       state.queryParams = newPayload;
     },
     updateCategory: (

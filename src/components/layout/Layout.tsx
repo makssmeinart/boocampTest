@@ -1,12 +1,18 @@
 import styled from "styled-components/macro";
 import { ReactNode } from "react";
+import { Sidebar } from "components";
 
 type Props = {
   children: ReactNode;
 };
 
 const Layout = ({ children }: Props) => {
-  return <ContentWrapper>{children}</ContentWrapper>;
+  return (
+    <ContentWrapper>
+      <Sidebar />
+      {children}
+    </ContentWrapper>
+  );
 };
 
 export default Layout;

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { CatsParams, QueryParams } from "common/commonTypes";
 import { useCustomDispatch } from "store/store";
 import { selectCatsData, selectSidebarData } from "store/selectors";
-import { Cat, Layout, Loading, Sidebar } from "components";
+import { Cat, Layout, Loading } from "components";
 import { useParams } from "react-router-dom";
 import { getCategoryName } from "utils";
 
@@ -66,16 +66,18 @@ const Cats = () => {
   }, [cats.length]);
 
   const handleUpdateLimit = (increaseLimit: boolean) => {
-    const newLimit = increaseLimit
-      ? queryParams.limit + 10
-      : queryParams.limit - 10;
+    return () => {
+      const newLimit = increaseLimit
+        ? queryParams.limit + 10
+        : queryParams.limit - 10;
 
-    const payload: QueryParams = {
-      ...queryParams,
-      limit: newLimit,
+      const payload: QueryParams = {
+        ...queryParams,
+        limit: newLimit,
+      };
+
+      dispatch(updateQueryParams(payload));
     };
-
-    dispatch(updateQueryParams(payload));
   };
 
   // Maybe I could combine this with handleUpdateLimit but this seems a little more readable I think. I'm probably wrong tho
@@ -111,7 +113,6 @@ const Cats = () => {
         <Title>No cat images were found...</Title>
       ) : (
         <>
-          <Sidebar />
           <Layout>
             <Title>
               Category: <span>{category}</span>
@@ -125,13 +126,13 @@ const Cats = () => {
               </ButtonOption>
               <ButtonOption
                 disabled={isButtonDisabled}
-                onClick={() => handleUpdateLimit(true)}
+                onClick={handleUpdateLimit(true)}
               >
                 Max-Images: +10
               </ButtonOption>
               <ButtonOption
                 disabled={isButtonDisabled}
-                onClick={() => handleUpdateLimit(false)}
+                onClick={handleUpdateLimit(false)}
               >
                 Max-Images: -10
               </ButtonOption>
