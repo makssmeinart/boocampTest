@@ -55,7 +55,7 @@ function Navbar() {
                   key={item.name}
                   item={item}
                   toggleSidebar={toggleSidebar}
-                  isSidebarShown={showSidebar}
+                  showSidebar={showSidebar}
                   itemIndex={index}
                 />
               );

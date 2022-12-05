@@ -13,7 +13,7 @@ export type Cat = {
 export type QueryParams = {
   limit: number;
   page: number | null;
-  categoryId: number | null;
+  categoryId: string | undefined;
 };
 
 export type LoadingStatus = "idle" | "loading";
@@ -21,5 +21,5 @@ export type LoadingStatus = "idle" | "loading";
 export type ThemeType = "light" | "dark";
 
 export type CatsParams = {
-  id: string;
+  categoryId: string;
 };

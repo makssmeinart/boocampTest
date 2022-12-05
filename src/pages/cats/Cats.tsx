@@ -1,62 +1,69 @@
 import styled from "styled-components/macro";
 import { useSelector } from "react-redux";
-import { fetchCatsData, updateQueryParams } from "store/slices/catsSlice";
+import {
+  fetchCatsData,
+  updateCategory,
+  updateQueryParams,
+} from "store/slices/catsSlice";
 import { useEffect, useState } from "react";
 import { CatsParams, QueryParams } from "common/commonTypes";
 import { useCustomDispatch } from "store/store";
-import { selectCatsData } from "store/selectors";
-import Loading from "components/loading/Loading";
-import Cat from "components/cat/Cat";
-import Layout from "components/layout/Layout";
-import Sidebar from "components/sidebar/Sidebar";
+import { selectCatsData, selectSidebarData } from "store/selectors";
+import { Cat, Layout, Loading, Sidebar } from "components";
 import { useParams } from "react-router-dom";
+import { getCategoryName } from "utils";
 
 const Cats = () => {
   const { cats, queryParams, loading } = useSelector(selectCatsData);
-  const { id } = useParams<CatsParams>();
+  const { categories } = useSelector(selectSidebarData);
+  const { categoryId } = useParams<CatsParams>();
   const [isInitialized, setIsInitialized] = useState(false);
   const dispatch = useCustomDispatch();
-
-  const loadImagesPayload = {
-    ...queryParams,
-    categoryId: Number(id),
-    page: queryParams.page && queryParams.page + 1,
-  };
 
   useEffect(() => {
     if (isInitialized) {
       dispatch(fetchCatsData());
     }
     setIsInitialized(true);
-  }, [queryParams, isInitialized]);
+  }, [
+    queryParams.page,
+    queryParams.limit,
+    queryParams.categoryId,
+    isInitialized,
+  ]);
 
-  const handleLoadImages = (payload: QueryParams) => {
+  const handleLoadImages = () => {
+    const { page } = queryParams;
+
+    const payload: QueryParams = {
+      ...queryParams,
+      page: page && page + 1,
+    };
+
     dispatch(updateQueryParams(payload));
   };
 
+  // On URL change
   useEffect(() => {
-    const payload: QueryParams = {
-      categoryId: Number(id),
-      limit: 10,
-      page: 1,
-    };
-
-    handleLoadImages(payload);
-  }, [id]);
+    dispatch(updateCategory({ categoryId: categoryId }));
+  }, [categoryId]);
 
   const handleScroll = () => {
     const shouldScroll =
       window.innerHeight + document.documentElement.scrollTop + 1 >=
       document.documentElement.scrollHeight;
 
-    if (shouldScroll) {
-      handleLoadImages(loadImagesPayload);
+    // wait until cats are loaded first time so that shouldScroll not fire off before we have data
+    if (shouldScroll && cats.length > 0) {
+      handleLoadImages();
     }
   };
-  // I think we don't need to removeAddListener now in React v18 since it remounts it itself.
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-  }, []);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [cats.length]);
 
   const handleUpdateLimit = (increaseLimit: boolean) => {
     const newLimit = increaseLimit
@@ -65,23 +72,33 @@ const Cats = () => {
 
     const payload: QueryParams = {
       ...queryParams,
-      categoryId: Number(id),
       limit: newLimit,
     };
 
     dispatch(updateQueryParams(payload));
   };
 
-  const category = "all";
+  // Maybe I could combine this with handleUpdateLimit but this seems a little more readable I think. I'm probably wrong tho
+  const handleResetFilter = () => {
+    const payload: QueryParams = {
+      ...queryParams,
+      limit: 10,
+    };
+
+    dispatch(updateQueryParams(payload));
+  };
+
+  const category = getCategoryName({
+    currentCategoryId: Number(categoryId),
+    categories,
+  });
 
   const isButtonDisabled = loading === "loading";
 
   const loadButton = isButtonDisabled ? (
     <LoadButton disabled>Loading...</LoadButton>
   ) : (
-    <LoadButton onClick={() => handleLoadImages(loadImagesPayload)}>
-      Load More...
-    </LoadButton>
+    <LoadButton onClick={handleLoadImages}>Load More...</LoadButton>
   );
 
   if (cats.length < 1) {
@@ -101,10 +118,10 @@ const Cats = () => {
             </Title>
             <ButtonOptions>
               <ButtonOption
+                onClick={handleResetFilter}
                 disabled={isButtonDisabled}
-                // onClick={handleResetFilter}
               >
-                Reset filters
+                Reset Limit
               </ButtonOption>
               <ButtonOption
                 disabled={isButtonDisabled}

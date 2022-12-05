@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "store/store";
 import { Cat, LoadingStatus, QueryParams } from "common/commonTypes";
-import { fetchCats } from "services/fetchCats";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
+import { fetchCats } from "services";
 
 interface CatsState {
   cats: Cat[];
@@ -16,7 +14,7 @@ const initialState: CatsState = {
   queryParams: {
     limit: 10,
     page: 1,
-    categoryId: null,
+    categoryId: "null",
   },
   loading: "idle",
 };
@@ -25,13 +23,8 @@ export const fetchCatsData = createAsyncThunk(
   "cats/fetchData",
   async (arg, { getState }) => {
     const { cats } = getState() as RootState;
-    const { limit, page, categoryId } = cats.queryParams;
 
-    const payload: QueryParams = {
-      limit,
-      page,
-      categoryId,
-    };
+    const payload: QueryParams = { ...cats.queryParams };
 
     const response = await fetchCats(payload);
     return response;
@@ -53,9 +46,21 @@ const catsSlice = createSlice({
 
       state.queryParams = newPayload;
     },
+    updateCategory: (
+      state,
+      action: PayloadAction<{ categoryId: string | undefined }>
+    ) => {
+      const newPayload: QueryParams = {
+        categoryId: action.payload.categoryId,
+        page: 1,
+        limit: 10,
+      };
+
+      state.queryParams = newPayload;
+      state.cats = [];
+    },
   },
   extraReducers: (builder) => {
-    // Maybe change the loading.
     builder.addCase(fetchCatsData.fulfilled, (state, action) => {
       state.cats.push(...action.payload);
       state.loading = "idle";
@@ -69,6 +74,6 @@ const catsSlice = createSlice({
   },
 });
 
-export const { updateQueryParams } = catsSlice.actions;
+export const { updateQueryParams, updateCategory } = catsSlice.actions;
 
 export default catsSlice.reducer;

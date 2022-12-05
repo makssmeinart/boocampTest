@@ -6,13 +6,11 @@ import {
   Routes,
 } from "react-router-dom";
 import { ROUTES } from "constant/routes";
-import PageNotFound from "components/pageNotFound/PageNotFound";
 import styled, { ThemeProvider } from "styled-components/macro";
 import { useSelector } from "react-redux";
 import { selectAppData } from "store/selectors";
-import { ErrorSnackbar } from "components/errorSnackbar/ErrorSnackbar";
-import ScrollToTop from "components/scrollToTop/ScrollToTop";
-import { CatsPage } from "pages";
+import { ErrorSnackbar, ScrollToTop } from "components";
+import { CatsPage, NotFound } from "pages";
 import { darkTheme, lightTheme } from "styles";
 
 function App() {
@@ -31,11 +29,7 @@ function App() {
               element={<Navigate to={ROUTES.NO_CATEGORY} />}
             />
             <Route path={ROUTES.CATS} element={<CatsPage />} />
-            <Route path={ROUTES.PAGE_NOT_FOUND} element={<PageNotFound />} />
-            <Route
-              path={"/*"}
-              element={<Navigate to={ROUTES.PAGE_NOT_FOUND} />}
-            />
+            <Route path={"/*"} element={<NotFound />} />
           </Routes>
         </Router>
         {error && <ErrorSnackbar />}

@@ -2,7 +2,7 @@ import { ROUTES } from "constant/routes";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 
-export const PageNotFound = () => {
+export const NotFound = () => {
   return (
     <Container>
       <Noise />
@@ -24,7 +24,7 @@ export const PageNotFound = () => {
   );
 };
 
-export default PageNotFound;
+export default NotFound;
 
 const Container = styled("section")`
   box-sizing: border-box;

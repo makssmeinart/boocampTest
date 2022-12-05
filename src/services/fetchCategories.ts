@@ -1,11 +1,13 @@
-import axiosQuery from "utils/axiosInstance";
 import { AxiosResponse } from "axios";
 import { Category } from "common/commonTypes";
+import { axiosQuery } from "utils";
 
-export const fetchCategories = async () => {
+const fetchCategories = async () => {
   const { data }: AxiosResponse<Category[]> = await axiosQuery.get(
     "/categories"
   );
 
   return data;
 };
+
+export default fetchCategories;

@@ -1,6 +1,6 @@
 export const ROUTES = {
   HOME: "/",
+  CATS: "/category/:categoryId",
   PAGE_NOT_FOUND: "/404",
-  CATS: "/category/:id",
   NO_CATEGORY: "/category/null",
 };

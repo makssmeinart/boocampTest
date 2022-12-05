@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchCategories } from "services/fetchCategories";
+import { fetchCategories } from "services";
 import { Category } from "common/commonTypes";
 
 interface SidebarState {

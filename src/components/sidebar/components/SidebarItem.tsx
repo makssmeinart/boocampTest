@@ -5,14 +5,14 @@ import { NavLink } from "react-router-dom";
 type Props = {
   item: Category;
   toggleSidebar: () => void;
-  isSidebarShown: boolean;
+  showSidebar: boolean;
   itemIndex: number;
 };
 
 const SidebarItem = ({
   item,
   toggleSidebar,
-  isSidebarShown,
+  showSidebar,
   itemIndex,
 }: Props) => {
   const { id, name } = item;
@@ -20,7 +20,7 @@ const SidebarItem = ({
   return (
     <NavItem
       to={`/category/${id}`}
-      isSidebarShown={isSidebarShown}
+      showSidebar={showSidebar}
       itemIndex={itemIndex}
       onClick={toggleSidebar}
     >
@@ -31,7 +31,11 @@ const SidebarItem = ({
 
 export default SidebarItem;
 
-const NavItem = styled(NavLink)<{ isSidebarShown: boolean; itemIndex: number }>`
+const NavItem = styled(
+  ({ showSidebar: boolean, itemIndex: number, ...props }) => (
+    <NavLink {...props} />
+  )
+)`
   width: 100%;
   padding: 16px 32px;
   cursor: pointer;
@@ -42,9 +46,8 @@ const NavItem = styled(NavLink)<{ isSidebarShown: boolean; itemIndex: number }>`
   text-decoration: none;
   transition: 0.2s ease background-color;
   text-transform: uppercase;
-  // Here basically I want to call animation each time I open the sidebar. And each item should slide out a little longer than the other.
-  animation: ${({ isSidebarShown, itemIndex }) =>
-    isSidebarShown && `__slideInLeft ${itemIndex < 1 ? 0.2 : itemIndex / 4}`}s;
+  animation: ${({ showSidebar, itemIndex }) =>
+    showSidebar && `__slideInLeft ${itemIndex < 1 ? 0.2 : itemIndex / 4}`}s;
 
   &.active {
     background-color: ${({ theme }) => theme.colors.accent};

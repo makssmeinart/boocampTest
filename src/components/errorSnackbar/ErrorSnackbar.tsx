@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Snackbar } from "components/snackbar/Snackbar";
+import { Snackbar } from "components";
 import { selectAppData } from "store/selectors";
 import { updateErrorStatus } from "store/slices/appSlice";
 
-export const ErrorSnackbar = () => {
+const ErrorSnackbar = () => {
   const { error } = useSelector(selectAppData);
   const dispatch = useDispatch();
 
@@ -20,3 +20,5 @@ export const ErrorSnackbar = () => {
     />
   );
 };
+
+export default ErrorSnackbar;

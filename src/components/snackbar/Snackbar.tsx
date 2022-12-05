@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 
-export const Snackbar = ({
+const Snackbar = ({
   open,
   autoHideDuration,
   onClose,
@@ -29,6 +29,8 @@ export const Snackbar = ({
     </>
   );
 };
+
+export default Snackbar;
 
 // Types
 
