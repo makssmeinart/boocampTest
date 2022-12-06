@@ -1,52 +1,43 @@
 import styled from "styled-components/macro";
 import { useSelector } from "react-redux";
-import {
-  fetchCatsData,
-  updateCategory,
-  updateQueryParams,
-} from "store/slices/catsSlice";
+import { fetchCatsData, resetCatsData } from "store/slices/catsSlice";
 import { useEffect, useState } from "react";
-import { CatsParams, QueryParams } from "common/commonTypes";
 import { useCustomDispatch } from "store/store";
 import { selectCatsData, selectSidebarData } from "store/selectors";
 import { Cat, Layout, Loading } from "components";
-import { useParams } from "react-router-dom";
 import { getCategoryName } from "utils";
+import { useTypedSearchParams } from "hooks/useTypedSearchParams";
+import { QueryParams } from "common/commonTypes";
 
 const Cats = () => {
-  const { cats, queryParams, loading } = useSelector(selectCatsData);
+  const { cats, loading } = useSelector(selectCatsData);
+  const [params, setSearchParams] = useTypedSearchParams<QueryParams>();
   const { categories } = useSelector(selectSidebarData);
-  const { categoryId } = useParams<CatsParams>();
   const [isInitialized, setIsInitialized] = useState(false);
   const dispatch = useCustomDispatch();
 
   useEffect(() => {
     if (isInitialized) {
-      dispatch(fetchCatsData());
+      dispatch(fetchCatsData(params));
     }
     setIsInitialized(true);
-  }, [
-    queryParams.page,
-    queryParams.limit,
-    queryParams.categoryId,
-    isInitialized,
-  ]);
+  }, [isInitialized, params.page, params.limit, params.category_ids]);
+
+  // Reset the state if we change the category
+  useEffect(() => {
+    if (isInitialized) {
+      dispatch(resetCatsData());
+    }
+  }, [params.category_ids, params.limit]);
 
   const handleLoadImages = () => {
-    const { page } = queryParams;
-
     const payload: QueryParams = {
-      ...queryParams,
-      page: page && page + 1,
+      ...params,
+      page: params.page && String(Number(params.page) + 1),
     };
 
-    dispatch(updateQueryParams(payload));
+    setSearchParams(payload);
   };
-
-  // On URL change
-  useEffect(() => {
-    dispatch(updateCategory({ categoryId: categoryId }));
-  }, [categoryId]);
 
   const handleScroll = () => {
     const shouldScroll =
@@ -67,31 +58,32 @@ const Cats = () => {
 
   const handleUpdateLimit = (increaseLimit: boolean) => {
     return () => {
-      const newLimit = increaseLimit
-        ? queryParams.limit + 10
-        : queryParams.limit - 10;
+      let newLimit = increaseLimit
+        ? Number(params.limit) + 10
+        : Number(params.limit) - 10;
+
+      newLimit = newLimit < 1 ? 1 : newLimit > 50 ? 50 : newLimit;
 
       const payload: QueryParams = {
-        ...queryParams,
-        limit: newLimit,
+        ...params,
+        limit: String(newLimit),
       };
 
-      dispatch(updateQueryParams(payload));
+      setSearchParams(payload);
     };
   };
 
-  // Maybe I could combine this with handleUpdateLimit but this seems a little more readable I think. I'm probably wrong tho
   const handleResetFilter = () => {
     const payload: QueryParams = {
-      ...queryParams,
-      limit: 10,
+      limit: "10",
+      page: "1",
     };
 
-    dispatch(updateQueryParams(payload));
+    setSearchParams(payload);
   };
 
   const category = getCategoryName({
-    currentCategoryId: Number(categoryId),
+    currentCategoryId: Number(params.category_ids),
     categories,
   });
 
@@ -122,7 +114,7 @@ const Cats = () => {
                 onClick={handleResetFilter}
                 disabled={isButtonDisabled}
               >
-                Reset Limit
+                Reset Filters
               </ButtonOption>
               <ButtonOption
                 disabled={isButtonDisabled}

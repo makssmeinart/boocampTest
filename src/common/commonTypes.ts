@@ -11,15 +11,11 @@ export type Cat = {
 };
 
 export type QueryParams = {
-  limit: number;
-  page: number | null;
-  categoryId: string | undefined;
+  limit?: string;
+  page?: string;
+  category_ids?: string;
 };
 
 export type LoadingStatus = "idle" | "loading";
 
 export type ThemeType = "light" | "dark";
-
-export type CatsParams = {
-  categoryId: string;
-};

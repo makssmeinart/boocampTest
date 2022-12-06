@@ -1,31 +1,20 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "store/store";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Cat, LoadingStatus, QueryParams } from "common/commonTypes";
 import { fetchCats } from "services";
 
 interface CatsState {
   cats: Cat[];
-  queryParams: QueryParams;
   loading: LoadingStatus;
 }
 
 const initialState: CatsState = {
   cats: [],
-  queryParams: {
-    limit: 10,
-    page: 1,
-    categoryId: "null",
-  },
   loading: "idle",
 };
 
 export const fetchCatsData = createAsyncThunk(
   "cats/fetchData",
-  async (arg, { getState }) => {
-    const { cats } = getState() as RootState;
-
-    const payload: QueryParams = { ...cats.queryParams };
-
+  async (payload: QueryParams) => {
     const response = await fetchCats(payload);
     return response;
   }
@@ -35,28 +24,7 @@ const catsSlice = createSlice({
   name: "cats",
   initialState,
   reducers: {
-    updateQueryParams: (state, action: PayloadAction<QueryParams>) => {
-      const { limit } = action.payload;
-      // Seems like 60 is the limit. But in docs it is saying should be 100
-      let newLimit = limit < 1 ? 1 : limit > 60 ? 60 : limit;
-
-      const newPayload: QueryParams = {
-        ...action.payload,
-        limit: newLimit,
-      };
-      state.queryParams = newPayload;
-    },
-    updateCategory: (
-      state,
-      action: PayloadAction<{ categoryId: string | undefined }>
-    ) => {
-      const newPayload: QueryParams = {
-        categoryId: action.payload.categoryId,
-        page: 1,
-        limit: 10,
-      };
-
-      state.queryParams = newPayload;
+    resetCatsData: (state) => {
       state.cats = [];
     },
   },
@@ -74,6 +42,6 @@ const catsSlice = createSlice({
   },
 });
 
-export const { updateQueryParams, updateCategory } = catsSlice.actions;
+export const { resetCatsData } = catsSlice.actions;
 
 export default catsSlice.reducer;

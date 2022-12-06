@@ -19,7 +19,7 @@ const SidebarItem = ({
 
   return (
     <NavItem
-      to={`/category/${id}`}
+      to={`/cats?limit=10&page=1&category_ids=${id}`}
       showSidebar={showSidebar}
       itemIndex={itemIndex}
       onClick={toggleSidebar}
