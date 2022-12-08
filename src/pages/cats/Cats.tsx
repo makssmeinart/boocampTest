@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useCustomDispatch } from "store/store";
 import { selectCatsData, selectSidebarData } from "store/selectors";
 import { Cat, Layout, Loading } from "components";
-import { getCategoryName } from "utils";
+import { getCategoryName, getUpdatedLimit } from "utils";
 import { useTypedSearchParams } from "hooks/useTypedSearchParams";
 import { QueryParams } from "common/commonTypes";
 
@@ -23,7 +23,7 @@ const Cats = () => {
     setIsInitialized(true);
   }, [isInitialized, params.page, params.limit, params.category_ids]);
 
-  // Reset the state if we change the category
+  // Reset the state if we change the category or limit
   useEffect(() => {
     if (isInitialized) {
       dispatch(resetCatsData());
@@ -58,16 +58,7 @@ const Cats = () => {
 
   const handleUpdateLimit = (increaseLimit: boolean) => {
     return () => {
-      let newLimit = increaseLimit
-        ? Number(params.limit) + 10
-        : Number(params.limit) - 10;
-
-      newLimit = newLimit < 1 ? 1 : newLimit > 50 ? 50 : newLimit;
-
-      const payload: QueryParams = {
-        ...params,
-        limit: String(newLimit),
-      };
+      const payload = getUpdatedLimit({ increaseLimit, params });
 
       setSearchParams(payload);
     };

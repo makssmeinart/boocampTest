@@ -1,6 +1,7 @@
-import { Category } from "common/commonTypes";
+import { Category, QueryParams } from "common/commonTypes";
 import styled from "styled-components/macro";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useTypedSearchParams } from "hooks/useTypedSearchParams";
 
 type Props = {
   item: Category;
@@ -16,25 +17,27 @@ const SidebarItem = ({
   itemIndex,
 }: Props) => {
   const { id, name } = item;
+  const [params] = useTypedSearchParams<QueryParams>();
+
+  const isActive = Number(params.category_ids) === id;
 
   return (
-    <NavItem
+    <CustomLink
       to={`/cats?limit=10&page=1&category_ids=${id}`}
       showSidebar={showSidebar}
       itemIndex={itemIndex}
       onClick={toggleSidebar}
+      className={isActive ? "active" : ""}
     >
       {name}
-    </NavItem>
+    </CustomLink>
   );
 };
 
 export default SidebarItem;
 
-const NavItem = styled(
-  ({ showSidebar: boolean, itemIndex: number, ...props }) => (
-    <NavLink {...props} />
-  )
+const CustomLink = styled(
+  ({ showSidebar: boolean, itemIndex: number, ...props }) => <Link {...props} />
 )`
   width: 100%;
   padding: 16px 32px;
