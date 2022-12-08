@@ -1,7 +1,8 @@
 const generateURLQueryParam = (url: string, objParams: any) => {
   const objFormatted = Object.fromEntries(
     Object.entries(objParams).filter(([_, v]) => v != null && v !== "")
-  );
+  ) as { [p: string]: string };
+
   if (Object.keys(objFormatted).length === 0) {
     return url;
   }
@@ -13,8 +14,7 @@ const generateURLQueryParam = (url: string, objParams: any) => {
       .map((key) => {
         return objFormatted[key] === "" || objFormatted[key] === null
           ? ""
-          : //@ts-ignore
-            `${key}=${encodeURIComponent(objFormatted[key])}`;
+          : `${key}=${encodeURIComponent(objFormatted[key])}`;
       })
       .join("&");
 
