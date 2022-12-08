@@ -2,12 +2,13 @@ import styled from "styled-components/macro";
 import { Cat as CatType } from "common/commonTypes";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import placeholder from "assets/images/placeholder/placeholder.png";
+import React from "react";
 
 type Props = {
   cat: CatType;
 };
 
-const Cat = ({ cat }: Props) => {
+const Cat = React.memo(({ cat }: Props) => {
   const { url } = cat;
 
   return (
@@ -22,7 +23,7 @@ const Cat = ({ cat }: Props) => {
       />
     </CatItem>
   );
-};
+});
 
 export default Cat;
 
